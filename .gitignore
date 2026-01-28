@@ -1,0 +1,113 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+package-lock.json
+yarn.lock
+bun.lock
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.expo-shared/
+
+# Native
+ios/
+android/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.keystore
+
+# Metro
+.metro-health-check*
+.metro-
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+*.pem
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Editor
+*.swp
+*.swo
+*~
+
+# local env files
+.env*.local
+.env
+
+# typescript
+*.tsbuildinfo
+build/
+tsc/
+
+# bundler
+.parcel-cache
+.rpt2_cache/
+.happypack/
+
+# testing
+coverage/
+.nyc_output/
+
+# production
+/build
+
+# misc
+*.log
+.history
+.tern-port
+.rork
+rork-eslint.config.js
+
+# Firebase
+.firebase/
+firestore-debug.log
+ui-debug.log
+
+# Husky
+.husky/_
