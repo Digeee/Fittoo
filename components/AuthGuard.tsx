@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { useRouter, useSegments } from 'expo-router';
-import Colors from '@/constants/colors';
-import { useUser } from '@/contexts/UserContext';
+import { useRouter } from 'expo-router';
+import { useUser } from '../contexts/UserContext'; // Using relative path
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -12,27 +11,24 @@ interface AuthGuardProps {
 export default function AuthGuard({ children, requireAuth = true }: AuthGuardProps) {
   const { isAuthenticated, isLoading } = useUser();
   const router = useRouter();
-  const segments = useSegments();
 
   useEffect(() => {
     if (isLoading) return;
 
-    const inAuthGroup = segments[0] === '(auth)';
-    const inTabsGroup = segments[0] === '(tabs)';
-
-    if (requireAuth && !isAuthenticated && !inAuthGroup) {
-      // User is not authenticated and trying to access protected route
-      router.replace('/login');
-    } else if (!requireAuth && isAuthenticated && inAuthGroup) {
-      // User is authenticated but on login/signup page
+    // If requiring auth and user is not authenticated
+    if (requireAuth && !isAuthenticated) {
+      router.replace('/(auth)/login');
+    }
+    // If not requiring auth (public route) and user is authenticated, redirect away from login
+    else if (!requireAuth && isAuthenticated) {
       router.replace('/(tabs)/home');
     }
-  }, [isAuthenticated, isLoading, router, segments, requireAuth]);
+  }, [isAuthenticated, isLoading, router, requireAuth]);
 
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color="#7FD87F" />
       </View>
     );
   }
@@ -45,7 +41,7 @@ export default function AuthGuard({ children, requireAuth = true }: AuthGuardPro
   // Show loading while redirecting
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={Colors.primary} />
+      <ActivityIndicator size="large" color="#7FD87F" />
     </View>
   );
 }
@@ -55,6 +51,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.background,
+    backgroundColor: '#F8F9FA',
   },
 });
