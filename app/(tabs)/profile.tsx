@@ -21,8 +21,8 @@ export default function ProfileScreen() {
           style: 'destructive',
           onPress: () => {
             logout();
-            // Using a route that exists in the router
-            router.replace('/(auth)/login');
+            // Navigate to index which will handle the authentication redirect
+            router.replace('/');
           }
         }
       ]
