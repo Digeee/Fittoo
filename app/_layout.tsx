@@ -81,6 +81,7 @@ function RootLayoutNav() {
       <Stack.Screen name="settings" />
       <Stack.Screen name="statistics" />
       <Stack.Screen name="reminders" />
+      <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
     </Stack>
   );
 }
