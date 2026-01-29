@@ -46,10 +46,12 @@ export const [UserProvider, useUser] = createContextHook(() => {
   const loadUserData = async () => {
     try {
       setIsLoading(true);
-      const [profileData, workoutsData, activitiesData] = await Promise.all([
+      const [profileData, workoutsData, activitiesData, authToken, userCredentials] = await Promise.all([
         AsyncStorage.getItem(STORAGE_KEY),
         AsyncStorage.getItem(WORKOUTS_KEY),
         AsyncStorage.getItem(ACTIVITY_KEY),
+        AsyncStorage.getItem(AUTH_TOKEN_KEY),
+        AsyncStorage.getItem(USER_CREDENTIALS_KEY),
       ]);
 
       if (profileData) {
@@ -61,11 +63,148 @@ export const [UserProvider, useUser] = createContextHook(() => {
       if (activitiesData) {
         setActivities(JSON.parse(activitiesData));
       }
+      
+      // Load authentication state
+      if (authToken && userCredentials) {
+        setAuthState({
+          isAuthenticated: true,
+          authToken,
+          user: JSON.parse(userCredentials)
+        });
+      }
     } catch (error) {
       console.error('Error loading user data:', error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Authentication functions
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // Simulate API call - in real app, this would be an actual API request
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mock validation - in real app, validate against backend
+      if (!email || !password) {
+        return { success: false, error: 'Please enter both email and password' };
+      }
+      
+      if (!email.includes('@')) {
+        return { success: false, error: 'Please enter a valid email address' };
+      }
+      
+      if (password.length < 6) {
+        return { success: false, error: 'Password must be at least 6 characters' };
+      }
+      
+      // Mock successful login
+      const mockUser: UserCredentials = {
+        email,
+        password, // In real app, never store plain text passwords
+        id: Date.now().toString()
+      };
+      
+      const mockToken = `token_${Date.now()}`;
+      
+      // Save to storage
+      await Promise.all([
+        AsyncStorage.setItem(AUTH_TOKEN_KEY, mockToken),
+        AsyncStorage.setItem(USER_CREDENTIALS_KEY, JSON.stringify(mockUser))
+      ]);
+      
+      // Update auth state
+      setAuthState({
+        isAuthenticated: true,
+        authToken: mockToken,
+        user: mockUser
+      });
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: 'Login failed. Please try again.' };
+    }
+  };
+
+  const signup = async (email: string, password: string, name: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Validation
+      if (!email || !password || !name) {
+        return { success: false, error: 'Please fill in all fields' };
+      }
+      
+      if (!email.includes('@')) {
+        return { success: false, error: 'Please enter a valid email address' };
+      }
+      
+      if (password.length < 6) {
+        return { success: false, error: 'Password must be at least 6 characters' };
+      }
+      
+      if (name.length < 2) {
+        return { success: false, error: 'Name must be at least 2 characters' };
+      }
+      
+      // Mock successful signup
+      const mockUser: UserCredentials = {
+        email,
+        password, // In real app, never store plain text passwords
+        id: Date.now().toString()
+      };
+      
+      const mockToken = `token_${Date.now()}`;
+      
+      // Save to storage
+      await Promise.all([
+        AsyncStorage.setItem(AUTH_TOKEN_KEY, mockToken),
+        AsyncStorage.setItem(USER_CREDENTIALS_KEY, JSON.stringify(mockUser)),
+        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ ...defaultProfile, name }))
+      ]);
+      
+      // Update auth and profile state
+      setAuthState({
+        isAuthenticated: true,
+        authToken: mockToken,
+        user: mockUser
+      });
+      
+      setProfile({ ...defaultProfile, name });
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Signup error:', error);
+      return { success: false, error: 'Signup failed. Please try again.' };
+    }
+  };
+
+  const logout = async () => {
+    try {
+      // Clear all auth-related storage
+      await Promise.all([
+        AsyncStorage.removeItem(AUTH_TOKEN_KEY),
+        AsyncStorage.removeItem(USER_CREDENTIALS_KEY)
+      ]);
+      
+      // Reset auth state
+      setAuthState({
+        isAuthenticated: false,
+        authToken: null,
+        user: null
+      });
+      
+      // Reset profile (keep workouts and activities for demo purposes)
+      setProfile(defaultProfile);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const isAuthenticated = () => {
+    return authState.isAuthenticated && !!authState.authToken;
   };
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
@@ -173,10 +312,20 @@ export const [UserProvider, useUser] = createContextHook(() => {
   };
 
   return {
+    // User data
     profile,
     workouts,
     activities,
     isLoading,
+    
+    // Auth functions
+    login,
+    signup,
+    logout,
+    isAuthenticated: isAuthenticated(),
+    authState,
+    
+    // Profile functions
     updateProfile,
     completeOnboarding,
     completeWorkout,
