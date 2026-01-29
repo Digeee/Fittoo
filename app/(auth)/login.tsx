@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Mail, Lock, User, Eye, EyeOff, ArrowLeft } from 'lucide-react-native';
-import Card from '@/components/Card';
-import Colors from '@/constants/colors';
-import { useUser } from '@/contexts/UserContext';
+import { useUser } from '../../contexts/UserContext';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -98,7 +96,7 @@ export default function LoginScreen() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <ArrowLeft size={24} color={Colors.text} />
+            <ArrowLeft size={24} color="#2C3E50" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>
             {isLogin ? 'Welcome Back' : 'Create Account'}
@@ -106,10 +104,10 @@ export default function LoginScreen() {
           <View style={styles.placeholder} />
         </View>
 
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.logoContainer}>
             <View style={styles.logoCircle}>
-              <User size={40} color={Colors.primary} />
+              <User size={40} color="#7FD87F" />
             </View>
             <Text style={styles.appName}>FitGoals</Text>
             <Text style={styles.subtitle}>
@@ -119,7 +117,7 @@ export default function LoginScreen() {
             </Text>
           </View>
 
-          <Card style={styles.formCard}>
+          <View style={styles.formCard}>
             {errors.general ? (
               <View style={styles.errorBanner}>
                 <Text style={styles.errorText}>{errors.general}</Text>
@@ -129,13 +127,13 @@ export default function LoginScreen() {
             {!isLogin && (
               <View style={styles.inputContainer}>
                 <View style={styles.inputWrapper}>
-                  <User size={20} color={Colors.textLight} style={styles.inputIcon} />
+                  <User size={20} color="#7F8C8D" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="Full Name"
                     value={name}
                     onChangeText={setName}
-                    placeholderTextColor={Colors.textLight}
+                    placeholderTextColor="#7F8C8D"
                     autoCapitalize="words"
                   />
                 </View>
@@ -147,13 +145,13 @@ export default function LoginScreen() {
 
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
-                <Mail size={20} color={Colors.textLight} style={styles.inputIcon} />
+                <Mail size={20} color="#7F8C8D" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Email Address"
                   value={email}
                   onChangeText={setEmail}
-                  placeholderTextColor={Colors.textLight}
+                  placeholderTextColor="#7F8C8D"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -166,13 +164,13 @@ export default function LoginScreen() {
 
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
-                <Lock size={20} color={Colors.textLight} style={styles.inputIcon} />
+                <Lock size={20} color="#7F8C8D" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Password"
                   value={password}
                   onChangeText={setPassword}
-                  placeholderTextColor={Colors.textLight}
+                  placeholderTextColor="#7F8C8D"
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -182,9 +180,9 @@ export default function LoginScreen() {
                   onPress={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff size={20} color={Colors.textLight} />
+                    <EyeOff size={20} color="#7F8C8D" />
                   ) : (
-                    <Eye size={20} color={Colors.textLight} />
+                    <Eye size={20} color="#7F8C8D" />
                   )}
                 </TouchableOpacity>
               </View>
@@ -213,14 +211,14 @@ export default function LoginScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
-          </Card>
+          </View>
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>
               By continuing, you agree to our Terms of Service and Privacy Policy
             </Text>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
@@ -229,7 +227,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: '#F8F9FA',
   },
   safeArea: {
     flex: 1,
@@ -240,7 +238,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 24,
     paddingVertical: 16,
-    backgroundColor: Colors.white,
+    backgroundColor: '#FFFFFF',
   },
   backButton: {
     padding: 4,
@@ -248,13 +246,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600' as const,
-    color: Colors.text,
+    color: '#2C3E50',
   },
   placeholder: {
     width: 32,
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 32,
   },
@@ -266,7 +264,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: Colors.primary + '20',
+    backgroundColor: '#7FD87F20',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -274,21 +272,28 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 28,
     fontWeight: '700' as const,
-    color: Colors.text,
+    color: '#2C3E50',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: Colors.textLight,
+    color: '#7F8C8D',
     textAlign: 'center',
     lineHeight: 24,
   },
   formCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
     padding: 24,
     marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
   errorBanner: {
-    backgroundColor: Colors.error + '20',
+    backgroundColor: '#E74C3C20',
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
@@ -299,12 +304,12 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.white,
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderWidth: 1,
-    borderColor: Colors.gray,
+    borderColor: '#E8EAED',
   },
   inputIcon: {
     marginRight: 12,
@@ -312,7 +317,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: Colors.text,
+    color: '#2C3E50',
   },
   eyeIcon: {
     padding: 4,
@@ -320,12 +325,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12,
-    color: Colors.error,
+    color: '#E74C3C',
     marginTop: 6,
     marginLeft: 4,
   },
   submitButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: '#7FD87F',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -338,7 +343,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600' as const,
-    color: Colors.white,
+    color: '#FFFFFF',
   },
   switchContainer: {
     flexDirection: 'row',
@@ -347,12 +352,12 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: '#7F8C8D',
   },
   switchLink: {
     fontSize: 14,
     fontWeight: '600' as const,
-    color: Colors.primary,
+    color: '#7FD87F',
   },
   footer: {
     alignItems: 'center',
@@ -361,7 +366,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: '#7F8C8D',
     textAlign: 'center',
     lineHeight: 18,
   },
