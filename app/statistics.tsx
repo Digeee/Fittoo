@@ -168,6 +168,7 @@ export default function StatisticsScreen() {
                 width={300}
                 height={220}
                 yAxisLabel=""
+                yAxisSuffix="min"
                 chartConfig={{
                   ...chartConfig,
                   color: (opacity = 1) => `rgba(255, 140, 66, ${opacity})`,
