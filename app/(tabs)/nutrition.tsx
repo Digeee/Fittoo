@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Plus, Search, Apple, Beef, Milk, Wheat } from 'lucide-react-native';
-import Card from '@/components/Card';
-import Colors from '@/constants/colors';
-import { useUser } from '@/contexts/UserContext';
+import Card from '../../components/Card';
+import Colors from '../../constants/colors';
+import { useUser } from '../../contexts/UserContext';
 
 interface FoodItem {
   id: string;

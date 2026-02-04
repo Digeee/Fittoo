@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useUser } from '@/contexts/UserContext';
-import Colors from '@/constants/colors';
+import { useUser } from '../contexts/UserContext';
+import Colors from '../constants/colors';
 
 export default function IndexScreen() {
   const router = useRouter();

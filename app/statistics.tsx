@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BarChart, LineChart } from 'react-native-chart-kit';
 import { Calendar, TrendingUp, Award, Target } from 'lucide-react-native';
-import Card from '@/components/Card';
-import Colors from '@/constants/colors';
-import { useUser } from '@/contexts/UserContext';
+import Card from '../components/Card';
+import Colors from '../constants/colors';
+import { useUser } from '../contexts/UserContext';
 
 interface WeeklyData {
   labels: string[];
