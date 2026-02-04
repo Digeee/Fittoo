@@ -1,8 +1,8 @@
 import createContextHook from '@nkzw/create-context-hook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { UserProfile, Workout, ActivityLog, ProgressData } from '@/types/user';
-import { mockWorkouts } from '@/mocks/workouts';
+import { UserProfile, Workout, ActivityLog, ProgressData } from '../types/user';
+import { mockWorkouts } from '../mocks/workouts';
 
 const STORAGE_KEY = '@fitness_user_profile';
 const WORKOUTS_KEY = '@fitness_workouts';
