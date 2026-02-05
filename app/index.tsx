@@ -19,8 +19,7 @@ export default function IndexScreen() {
         }
       } else {
         // If not authenticated, redirect to login
-        // If not authenticated, user needs to log in
-        console.log('Authentication required, redirect to login screen');
+        router.replace('/(auth)/login');
       }
     }
   }, [isLoading, profile.onboarded, isAuthenticated, router]);

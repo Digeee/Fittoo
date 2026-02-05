@@ -85,7 +85,7 @@ export const [UserProvider, useUser] = createContextHook(() => {
       // Simulate API call - in real app, this would be an actual API request
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock validation - in real app, validate against backend
+      // Validation
       if (!email || !password) {
         return { success: false, error: 'Please enter both email and password' };
       }
@@ -98,29 +98,37 @@ export const [UserProvider, useUser] = createContextHook(() => {
         return { success: false, error: 'Password must be at least 6 characters' };
       }
       
-      // Mock successful login
-      const mockUser: UserCredentials = {
-        email,
-        password, // In real app, never store plain text passwords
-        id: Date.now().toString()
-      };
-      
-      const mockToken = `token_${Date.now()}`;
-      
-      // Save to storage
-      await Promise.all([
-        AsyncStorage.setItem(AUTH_TOKEN_KEY, mockToken),
-        AsyncStorage.setItem(USER_CREDENTIALS_KEY, JSON.stringify(mockUser))
-      ]);
-      
-      // Update auth state
-      setAuthState({
-        isAuthenticated: true,
-        authToken: mockToken,
-        user: mockUser
-      });
-      
-      return { success: true };
+      // Check if user exists (for mock implementation)
+      const storedCredentials = await AsyncStorage.getItem(USER_CREDENTIALS_KEY);
+      if (storedCredentials) {
+        const existingUser = JSON.parse(storedCredentials);
+        if (existingUser.email === email && existingUser.password === password) {
+          // Valid login
+          const mockToken = `token_${Date.now()}`;
+          
+          // Update auth state
+          setAuthState({
+            isAuthenticated: true,
+            authToken: mockToken,
+            user: existingUser
+          });
+          
+          // Also load the user's profile
+          const storedProfile = await AsyncStorage.getItem(STORAGE_KEY);
+          if (storedProfile) {
+            setProfile(JSON.parse(storedProfile));
+          }
+          
+          // Save the auth token
+          await AsyncStorage.setItem(AUTH_TOKEN_KEY, mockToken);
+          
+          return { success: true };
+        } else {
+          return { success: false, error: 'Invalid email or password' };
+        }
+      } else {
+        return { success: false, error: 'No account found with this email' };
+      }
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: 'Login failed. Please try again.' };
@@ -149,8 +157,17 @@ export const [UserProvider, useUser] = createContextHook(() => {
         return { success: false, error: 'Name must be at least 2 characters' };
       }
       
-      // Mock successful signup
-      const mockUser: UserCredentials = {
+      // Check if user already exists
+      const storedCredentials = await AsyncStorage.getItem(USER_CREDENTIALS_KEY);
+      if (storedCredentials) {
+        const existingUser = JSON.parse(storedCredentials);
+        if (existingUser.email === email) {
+          return { success: false, error: 'An account with this email already exists' };
+        }
+      }
+      
+      // Create new user
+      const newUser: UserCredentials = {
         email,
         password, // In real app, never store plain text passwords
         id: Date.now().toString()
@@ -161,18 +178,18 @@ export const [UserProvider, useUser] = createContextHook(() => {
       // Save to storage
       await Promise.all([
         AsyncStorage.setItem(AUTH_TOKEN_KEY, mockToken),
-        AsyncStorage.setItem(USER_CREDENTIALS_KEY, JSON.stringify(mockUser)),
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ ...defaultProfile, name }))
+        AsyncStorage.setItem(USER_CREDENTIALS_KEY, JSON.stringify(newUser)),
+        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ ...defaultProfile, name, onboarded: false }))
       ]);
       
       // Update auth and profile state
       setAuthState({
         isAuthenticated: true,
         authToken: mockToken,
-        user: mockUser
+        user: newUser
       });
       
-      setProfile({ ...defaultProfile, name });
+      setProfile({ ...defaultProfile, name, onboarded: false });
       
       return { success: true };
     } catch (error) {
@@ -322,7 +339,7 @@ export const [UserProvider, useUser] = createContextHook(() => {
     login,
     signup,
     logout,
-    isAuthenticated: isAuthenticated(),
+    isAuthenticated: authState.isAuthenticated,
     authState,
     
     // Profile functions
