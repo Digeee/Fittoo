@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PlayCircle, TrendingUp, Activity, User, Flame, Trophy, Target, Clock, Fire, Award, HeartPulse } from 'lucide-react-native';
+import { PlayCircle, TrendingUp, Activity, User, Flame, Trophy, Target, Clock, Award, HeartPulse } from 'lucide-react-native';
 import Card from '../components/Card';
 import ProgressRing from '../components/ProgressRing';
 import Button from '../components/Button';
